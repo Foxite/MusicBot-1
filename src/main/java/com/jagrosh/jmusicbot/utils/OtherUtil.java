@@ -177,6 +177,8 @@ public class OtherUtil
     
     public static String getLatestVersion()
     {
+        return null;
+        /*
         try
         {
             Response response = new OkHttpClient.Builder().build()
@@ -201,6 +203,6 @@ public class OtherUtil
         catch(IOException | JSONException | NullPointerException ex)
         {
             return null;
-        }
+        }*/
     }
 }
