@@ -107,6 +107,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         defaultQueue.clear();
         audioPlayer.stopTrack();
         //current = null;
+        resetIdleTimer();
     }
     
     public boolean isMusicPlaying(JDA jda)
@@ -207,6 +208,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     {
         votes.clear();
         manager.getBot().getNowplayingHandler().onTrackUpdate(guildId, track, this);
+        resetIdleTimer();
+    }
+
+    private void resetIdleTimer() {
         idleTimer.cancel();
         idleTimer.purge();
         idleTimer = new Timer();

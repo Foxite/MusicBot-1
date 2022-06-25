@@ -137,6 +137,7 @@ public class Bot
                 AudioHandler ah = (AudioHandler)g.getAudioManager().getSendingHandler();
                 if(ah!=null)
                 {
+                    // TODO save handler states and resume on restart
                     ah.stopAndClear();
                     ah.getPlayer().destroy();
                     nowplaying.updateTopic(g.getIdLong(), ah, true);
