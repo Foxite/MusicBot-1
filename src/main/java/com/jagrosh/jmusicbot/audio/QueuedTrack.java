@@ -27,18 +27,18 @@ import net.dv8tion.jda.api.entities.User;
 public class QueuedTrack implements Queueable
 {
     private final AudioTrack track;
-    
+
     public QueuedTrack(AudioTrack track, User owner)
     {
         this(track, new RequestMetadata(owner));
     }
-    
+
     public QueuedTrack(AudioTrack track, RequestMetadata rm)
     {
         this.track = track;
         this.track.setUserData(rm);
     }
-    
+
     @Override
     public long getIdentifier() 
     {

@@ -84,7 +84,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
             return 0;
         }
     }
-    
+
     public int addTrack(QueuedTrack qtrack)
     {
         if(audioPlayer.getPlayingTrack()==null)
@@ -169,11 +169,15 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         // if the track ended normally, and we're in repeat mode, re-add it to the queue
         if(endReason==AudioTrackEndReason.FINISHED && repeatMode != RepeatMode.OFF)
         {
-            QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
-            if(repeatMode == RepeatMode.ALL)
-                queue.add(clone);
-            else
-                queue.addAt(0, clone);
+            RequestMetadata requestMetadata = track.getUserData(RequestMetadata.class);
+            if (requestMetadata == null || !requestMetadata.noRepeat())
+            {
+                QueuedTrack clone = new QueuedTrack(track.makeClone(), track.getUserData(RequestMetadata.class));
+                if (repeatMode == RepeatMode.ALL)
+                    queue.add(clone);
+                else
+                    queue.addAt(0, clone);
+            }
         }
         
         if(queue.isEmpty())
@@ -187,7 +191,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
                 // this is to prevent the player being paused next time it's being used.
                 player.setPaused(false);
 
-                long time = (long) ((random.nextDouble() * 60 + 30) * 1000);
+                long time = (long) ((random.nextDouble() * 30 + 60) * 1000);
                 idleTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -235,7 +239,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
 
         File idleSound = idleSounds[random.nextInt(idleSounds.length)];
         manager.loadItem(idleSound.getAbsolutePath(), new FunctionalResultHandler(
-                track -> addTrack(new QueuedTrack(track, manager.getBot().getJDA().getSelfUser())),
+                track -> addTrack(new QueuedTrack(track, new RequestMetadata(manager.getBot().getJDA().getSelfUser(), true))),
                 playlist -> {},
                 () -> {},
                 exception -> {}

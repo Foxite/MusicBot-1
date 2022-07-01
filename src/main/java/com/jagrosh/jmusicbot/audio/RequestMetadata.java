@@ -26,18 +26,29 @@ public class RequestMetadata
     public static final RequestMetadata EMPTY = new RequestMetadata(null);
     
     public final UserInfo user;
-    
+    private final boolean noRepeat;
+
     public RequestMetadata(User user)
     {
+        this(user, false);
+    }
+
+    public RequestMetadata(User user, boolean noRepeat)
+    {
         this.user = user == null ? null : new UserInfo(user.getIdLong(), user.getName(), user.getDiscriminator(), user.getEffectiveAvatarUrl());
+        this.noRepeat = noRepeat;
     }
     
     public long getOwner()
     {
         return user == null ? 0L : user.id;
     }
-    
-    public class RequestInfo
+
+	public boolean noRepeat() {
+        return noRepeat;
+	}
+
+	public class RequestInfo
     {
         public final String query, url;
         
